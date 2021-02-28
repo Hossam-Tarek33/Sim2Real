@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find sim2log)/launch/view_ur10.launch"/>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find sim2log)/config/ur10_control.yaml" command="load"/>
+  
+  <node name="robot_hardware_interface_node" pkg="sim2log" type="robot_hardware_interface_node" output="screen"/> 
+  
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/ur10" args="shoulder_pan_joint_position_controller 
+              shoulder_lift_joint_position_controller 
+              elbow_joint_position_controller 
+              wrist_1_joint_position_controller 
+              wrist_2_joint_position_controller 
+              wrist_3_joint_position_controller 
+              joint_state_controller"/> 
+
+  <!--GUI used to send fake joint values-->
+  <!--<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+    <param name="use_gui" value="TRUE"/>
+  </node>-->
+
+</launch>
